@@ -1,0 +1,51 @@
+ui:
+  grid:
+    - widget: Switch
+      props:
+        label: "move point cmd"
+        value: ${move_point_cmd_started}
+        disabled: ${move_point_cmd_start_switch_disabled}
+        on_change: ${on_change_move_point_cmd_switch}
+      layout: { x: 0, y: 0, w: 3, h: 1 }
+      
+    - widget: InputGroup
+      props:
+        group_name: "move point cmd"
+        label: "move point cmd"
+        columns: 3
+        items:
+          - { 'label': 'x', 'value': '0', 'type': 'number' }
+          - { 'label': 'y', 'value': '0', 'type': 'number' }
+          - { 'label': 'z', 'value': '0', 'type': 'number' }
+        button: true
+        button_label: "move point"
+        on_click: ${on_click_move_point_button}
+      layout: { x: 0, y: 1, w: 3, h: 3 }
+
+    - widget: Switch
+      props:
+        label: "get pose cmd"
+        value: ${get_pose_cmd_started}
+        disabled: ${get_pose_cmd_start_switch_disabled}
+        on_change: ${on_change_get_pose_cmd_switch}
+      layout: { x: 3, y: 0, w: 3, h: 1 }
+      
+    - widget: List
+      props:
+        labels: ${pose_list}
+        selected_index: 0
+      layout: { x: 3, y: 1, w: 3, h: 2 }
+      
+    - widget: Button
+      props:
+        label: "get pose"
+        on_click: ${on_click_get_pose_button}
+      layout: { x: 3, y: 3, w: 3, h: 1 }      
+      
+    - widget: Joystick
+      props:
+        on_change: ${on_change_joystick}
+      layout: { x: 6, y: 0, w: 2, h: 4 }
+
+
+

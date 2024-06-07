@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: roarm_description
+    relative_path: urdf/roarm_description.urdf
+  srdf:
+    relative_path: config/roarm_description.srdf
+  package_settings:
+    author_name: dudu
+    author_email: 2849678712@qq.com
+    generated_timestamp: 1715049590
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

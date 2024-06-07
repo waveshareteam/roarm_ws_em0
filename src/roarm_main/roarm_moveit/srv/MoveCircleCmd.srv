@@ -1,0 +1,10 @@
+# MoveCircleCmd.srv
+float64 x    # 圆心的x坐标
+float64 y    # 圆心的y坐标
+float64 z    # 绘制圆的高度
+float64 radius    # 圆的半径
+
+---
+bool success    # 执行是否成功的标志
+string message  # 执行结果的消息
+

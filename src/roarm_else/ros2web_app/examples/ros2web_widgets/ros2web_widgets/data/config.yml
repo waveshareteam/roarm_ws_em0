@@ -1,0 +1,104 @@
+ui:
+  grid:
+    - widget: Button
+      props:
+        label: "Start"
+        on_click: ${on_click_button}
+      layouts:
+        lg: {x: 10, y: 1, w: 2, h: 4}
+        md: {x: 8, y: 0, w: 2, h: 2}
+        sm: {x: 5, y: 3, w: 1, h: 2}
+        xs: {x: 2, y: 0, w: 1, h: 2}
+        xxs: {x: 1, y: 0, w: 1, h: 1}
+
+    - widget: Image
+      props:
+        topic: camera
+      layouts:
+        lg: { x: 5, y: 0, w: 3, h: 6 }
+        md: { x: 2, y: 0, w: 3, h: 6 }
+        sm: { x: 2, y: 0, w: 2, h: 4 }
+        xs: { x: 1, y: 0, w: 1, h: 2 }
+        xxs: { x: 0, y: 5, w: 2, h: 4 }
+
+    - widget: Joystick
+      props:
+        on_change: ${on_change_joystick}
+      layouts:
+        lg: { x: 8, y: 1, w: 2, h: 4 }
+        md: { x: 8, y: 2, w: 2, h: 4 }
+        sm: { x: 2, y: 4, w: 2, h: 3 }
+        xs: { x: 3, y: 0, w: 1, h: 4 }
+        xxs: { x: 1, y: 1, w: 1, h: 4 }
+    - widget: List
+      props:
+        labels: ${list_labels}
+        on_select: ${on_select_list}
+        selected_index: ${list_selected}
+      layouts:
+        lg: { x: 0, y: 0, w: 2, h: 6 }
+        md: { x: 0, y: 0, w: 2, h: 6 }
+        sm: { x: 0, y: 0, w: 2, h: 5 }
+        xs: { x: 0, y: 0, w: 1, h: 4 }
+        xxs: { x: 0, y: 0, w: 1, h: 5 }
+
+    - widget: Slider
+      props:
+        label: "Slider"
+        range: { min: 0, max: 100, step: 1 }
+        value: ${slider_value}
+        on_change: ${on_change_slider}
+        on_change_committed: ${on_change_slider}
+        text_field: true
+      layouts:
+        lg: { x: 2, y: 4, w: 3, h: 1 }
+        md: { x: 5, y: 4, w: 3, h: 1 }
+        sm: { x: 0, y: 5, w: 2, h: 1 }
+        xs: { x: 1, y: 3, w: 2, h: 1 }
+        xxs: { x: 0, y: 10, w: 2, h: 1 }
+
+    - widget: Switch
+      props:
+        label: "Switch"
+        value: ${switch_value}
+        on_change: ${on_change_switch}
+      layouts:
+        lg: { x: 2, y: 1, w: 3, h: 1 }
+        md: { x: 5, y: 2, w: 3, h: 1 }
+        sm: { x: 0, y: 6, w: 2, h: 1 }
+        xs: { x: 1, y: 2, w: 2, h: 1 }
+        xxs: { x: 0, y: 9, w: 2, h: 1 }
+
+    - widget: Input
+      props:
+        label: "Input"
+        value: ${input_value}
+        input_type: "text"
+        on_change: ${on_change_input}
+        on_change_committed: ${on_change_input}
+        on_click: ${on_click_input}
+        button: true
+      layouts:
+        lg: { x: 2, y: 4, w: 3, h: 1 }
+        md: { x: 5, y: 0, w: 3, h: 1 }
+        sm: { x: 0, y: 7, w: 2, h: 1 }
+        xs: { x: 1, y: 4, w: 2, h: 1 }
+        xxs: { x: 0, y: 11, w: 2, h: 1 }
+
+    - widget: InputGroup
+      props:
+        group_name: "Input Group"
+        items: ${input_group_items}
+        columns: 3
+        on_change: ${on_change_input_group}
+        on_change_committed: ${on_change_input_group}
+        button: true
+        button_label: "Send"
+        on_click: ${on_click_input_group}
+      layouts:
+        lg: { x: 2, y: 4, w: 3, h: 4 }
+        md: { x: 5, y: 0, w: 3, h: 4 }
+        sm: { x: 0, y: 7, w: 2, h: 4 }
+        xs: { x: 1, y: 4, w: 2, h: 4 }
+        xxs: { x: 0, y: 11, w: 2, h: 4 }
+

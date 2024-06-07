@@ -1,0 +1,31 @@
+ui:
+  grid:
+    - widget: Button
+      props:
+        label: "Start"
+        on_click: ${on_click}
+      layouts:
+        lg: {x: 0, y: 0, w: 2, h: 2}
+        md: {x: 0, y: 1, w: 1, h: 1}
+        sm: {x: 0, y: 2, w: 1, h: 1}
+        xs: {x: 0, y: 3, w: 1, h: 1}
+        xxs: {x: 0, y: 4, w: 1, h: 1}
+    - widget: Image
+      props:
+        topic: camera
+      layout: { x: 1, y: 0, w: 1, h: 1 }
+    - widget: Image
+      props:
+        topic: camera2
+      layout: { x: 2, y: 0, w: 1, h: 1 }
+    - widget: Joystick
+      props:
+        on_change: ${on_change}
+    - widget: List
+      props:
+        labels: ${labels}
+        on_click: ${on_select}
+    - widget: Switch
+      props:
+    - widget: Slider
+      props:

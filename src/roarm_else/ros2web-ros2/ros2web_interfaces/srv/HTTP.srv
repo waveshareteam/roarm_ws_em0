@@ -1,0 +1,29 @@
+# https://docs.aiohttp.org/en/stable/web_reference.html
+
+string[] headers  # [<key>, <value>, <key>, <value>, ...]
+string method     # HTTP method,
+string path       # The URL including PATH INFO without the host or scheme. 
+string query      # The query string in the URL
+
+string srv_name
+string route
+
+uint8[] body
+string text
+string content_type   # ContentType
+string charset
+BodyPart[] multipart
+---
+# string[] headers
+uint16 status # HTTPStatusCode
+string reason
+
+uint8[] body
+string text
+string content_type   # ContentType
+string charset
+# int16 zlib_executor_size
+# int16 zlib_executor
+
+string file_path
+# int32 chunk_size

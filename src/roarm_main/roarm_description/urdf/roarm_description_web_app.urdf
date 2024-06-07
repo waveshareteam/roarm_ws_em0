@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="roarm_description">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.00373847392098165 -1.52445893441182E-10 0.0264265327292804"
+        rpy="-1.5707963 0 0" />
+      <mass
+        value="0.326392759093976" />
+      <inertia
+        ixx="0.000224202818963409"
+        ixy="-1.96773409846652E-13"
+        ixz="-2.99224798427881E-05"
+        iyy="0.000286616921839535"
+        iyz="-3.10964171549742E-13"
+        izz="0.000349957607258242" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="link1">
+    <inertial>
+      <origin
+        xyz="-0.000140654613854069 -2.04804445311914E-05 0.0248060289552964"
+        rpy="-1.5707963 0 0" />
+      <mass
+        value="0.0928887601998397" />
+      <inertia
+        ixx="6.09210980255232E-05"
+        ixy="-2.78746155635367E-18"
+        ixz="4.24841544707896E-15"
+        iyy="2.53493566630784E-05"
+        iyz="2.16442830142327E-08"
+        izz="4.88050835919342E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="base_link_to_link1"
+    type="revolute">
+    <origin
+      xyz="0.01 0 0.0836"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.1415926"
+      upper="3.1415926"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link2">
+    <inertial>
+      <origin
+        xyz="0.122007657068629 0.000206805020594048 -9.50311342870328E-05"
+        rpy="-1.5707963 0 0" />
+      <mass
+        value="0.0895817175833772" />
+      <inertia
+        ixx="2.6269354271334E-05"
+        ixy="-2.55344668379587E-06"
+        ixz="-3.90237379833511E-09"
+        iyy="0.000350369536011832"
+        iyz="-6.82396195680567E-09"
+        izz="0.000333056833230846" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link1_to_link2"
+    type="revolute">
+    <origin
+      xyz="0 0.03618 0.039473"
+      rpy="-1.5708 -1.5708 0" />
+    <parent
+      link="link1" />
+    <child
+      link="link2" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.5708"
+      upper="1.5708"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link3">
+    <inertial>
+      <origin
+        xyz="0.114419656440925 -0.000762809457408361 -0.000177274968087197"
+        rpy="-1.5707963 0 0" />
+      <mass
+        value="0.123009044986454" />
+      <inertia
+        ixx="1.46357151076022E-05"
+        ixy="-1.06443789581449E-07"
+        ixz="1.6435520156444E-07"
+        iyy="0.000104111883333949"
+        iyz="1.54925816846056E-07"
+        izz="0.000104009297710106" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="-1.5707963 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link2_to_link3"
+    type="revolute">
+    <origin
+      xyz="0.2368 0.030002 -0.01607"
+      rpy="0 0 0" />
+    <parent
+      link="link2" />
+    <child
+      link="link3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1"
+      upper="3.1415926"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link4">
+    <inertial>
+      <origin
+        xyz="0.000960013987574684 0.0288857415118807 0.000699860921097348"
+        rpy="-4.7123889 0 0" />
+      <mass
+        value="0.00365697683069397" />
+      <inertia
+        ixx="2.33034171341163E-06"
+        ixy="-1.31250385773153E-07"
+        ixz="-4.13922574956767E-13"
+        iyy="1.15139272656909E-06"
+        iyz="-2.41954533685074E-13"
+        izz="1.47179863096272E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 -0.014508"
+        rpy="-4.7123889 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.219607843137255 0.219607843137255 0.219607843137255 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 -0.014508"
+        rpy="-4.7123889 0 0" />
+      <geometry>
+        <mesh
+          filename="package://roarm_description/meshes/link4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="link3_to_link4"
+    type="revolute">
+    <origin
+      xyz="0.21599 0 -0.02096"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="link3" />
+    <child
+      link="link4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="1.5"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

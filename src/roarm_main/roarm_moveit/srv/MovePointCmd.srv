@@ -1,0 +1,10 @@
+# MovePointCmd.srv
+# 请求部分
+float64 x    # 目标位置的x坐标
+float64 y    # 目标位置的y坐标
+float64 z    # 目标位置的z坐标
+---
+# 响应部分
+bool success    # 执行是否成功的标志
+string message  # 执行结果的消息
+
