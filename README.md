@@ -7,9 +7,9 @@
 
 ## 1 Installing ROS2 Applications for RoArm-M2-S on Ubuntu 22.04 (ROS2 Humble)
 - Download the Ubuntu 22.04 image
-    - Link: ![Ubuntu 22.04.4 Desktop Image](https://releases.ubuntu.com/jammy/ubuntu-22.04.4-desktop-amd64.iso)
+    - Link: [Ubuntu 22.04.4 Desktop Image](https://releases.ubuntu.com/jammy/ubuntu-22.04.4-desktop-amd64.iso)
 - Download and install Oracle VM VirtualBox
-    - Link: ![VirtualBox Downloads](https://www.virtualbox.org/wiki/Downloads)
+    - Link: [VirtualBox Downloads](https://www.virtualbox.org/wiki/Downloads)
 
 ### 1.1 Loading the Image File
 - Run Oracle VM VirtualBox.
