@@ -10,6 +10,7 @@ import threading
 import logging
 import time
 import math
+
 class ReadLine:
     def __init__(self, s):
         self.buf = bytearray()
@@ -45,6 +46,7 @@ class BaseController:
         self.command_thread.start()
         self.data_buffer = None
         self.base_data = {"T": 1051, "x": 0, "y": 0, "z": 0, "b": 0, "s": 0, "e": 0, "t": 0, "torB": 0, "torS": 0, "torE": 0, "torH": 0}
+        
     def feedback_data(self):
         try:
             line = self.rl.readline().decode('utf-8')
@@ -79,18 +81,23 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('roarm_driver')
         
-        self.declare_parameter('serial_port', '/dev/ttyUSB0')
+        self.declare_parameter('serial_port', '/dev/ttyUSB1')
         self.declare_parameter('baud_rate', 115200)
         
         serial_port_name = self.get_parameter('serial_port').get_parameter_value().string_value
         baud_rate = self.get_parameter('baud_rate').get_parameter_value().integer_value
         
-        
         try:
             self.serial_port = serial.Serial(serial_port_name, baud_rate)
             self.get_logger().info(f"{serial_port_name}，{baud_rate}。")
+            
+            # 发送初始指令
+            start_data = json.dumps({'T': 605, "cmd": 0}) + "\n"
+            self.serial_port.write(start_data.encode())
+            time.sleep(0.1)
+            
         except SerialException as e:
-            self.get_logger().error(f" {serial_port_name}：{e}")
+            self.get_logger().error(f"{serial_port_name}：{e}")
             return
 
         self.subscription = self.create_subscription(
@@ -136,25 +143,18 @@ class MinimalSubscriber(Node):
         
         try:
             self.serial_port.write(data.encode())
-
             time.sleep(0.05)
-            #self.get_logger().info(f"{data}")
         except SerialException as e:
             self.get_logger().error(f"{e}")
 
     def handle_get_pose_cmd(self, request, response):
         try:
-            start_data =json.dumps({'T': 605,"cmd": 0}) + "\n"
-            self.serial_port.write(start_data.encode())
-            time.sleep(0.1)
             
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
-            #self.get_logger().info(f"{request_data}")
-            self.base_controller = BaseController('/dev/ttyUSB0', 115200)
+            self.base_controller = BaseController('/dev/ttyUSB1', 115200)
             time.sleep(0.1)
             self.base_controller.feedback_data()
-            # 等待反馈
             
             if self.base_controller.base_data["T"] == 1051:
                feedback = self.base_controller.base_data
@@ -175,6 +175,7 @@ class MinimalSubscriber(Node):
         
 def main(args=None):
     rclpy.init(args=args)
+    
     minimal_subscriber = MinimalSubscriber()
     
     if minimal_subscriber.serial_port.is_open:
@@ -186,3 +187,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
