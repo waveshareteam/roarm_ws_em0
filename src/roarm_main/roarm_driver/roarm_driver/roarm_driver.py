@@ -79,7 +79,7 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('roarm_driver')
         
-        self.declare_parameter('serial_port', '/dev/ttyUSB1')
+        self.declare_parameter('serial_port', '/dev/ttyUSB0')
         self.declare_parameter('baud_rate', 115200)
         
         serial_port_name = self.get_parameter('serial_port').get_parameter_value().string_value
@@ -144,12 +144,17 @@ class MinimalSubscriber(Node):
 
     def handle_get_pose_cmd(self, request, response):
         try:
+            start_data =json.dumps({'T': 605,"cmd": 0}) + "\n"
+            self.serial_port.write(start_data.encode())
+            time.sleep(0.1)
+            
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
             #self.get_logger().info(f"{request_data}")
-            self.base_controller = BaseController('/dev/ttyUSB1', 115200)
+            self.base_controller = BaseController('/dev/ttyUSB0', 115200)
             time.sleep(0.1)
             self.base_controller.feedback_data()
+            # 等待反馈
             
             if self.base_controller.base_data["T"] == 1051:
                feedback = self.base_controller.base_data
