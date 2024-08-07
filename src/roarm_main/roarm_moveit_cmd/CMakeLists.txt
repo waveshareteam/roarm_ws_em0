@@ -68,11 +68,11 @@ ament_export_include_directories(include)
 
 # Define executables
 #add_executable(getposecmd 
-    src/getposecmd.cpp)
+#    src/getposecmd.cpp)
 #target_include_directories(getposecmd 
-    PUBLIC include)
+#   PUBLIC include)
 #ament_target_dependencies(getposecmd 
-    ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
+#    ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
     
 add_executable(keyboardcontrol
     src/keyboardcontrol.cpp)
@@ -105,7 +105,7 @@ ament_target_dependencies(webappcontrol
 
          
 # Install targets
-install(TARGETS getposecmd keyboardcontrol movepointcmd movecirclecmd webappcontrol 
+install(TARGETS keyboardcontrol movepointcmd movecirclecmd webappcontrol 
   DESTINATION lib/${PROJECT_NAME}
 )
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
