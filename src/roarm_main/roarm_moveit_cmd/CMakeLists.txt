@@ -67,11 +67,11 @@ ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 ament_export_include_directories(include)
 
 # Define executables
-add_executable(getposecmd 
+#add_executable(getposecmd 
     src/getposecmd.cpp)
-target_include_directories(getposecmd 
+#target_include_directories(getposecmd 
     PUBLIC include)
-ament_target_dependencies(getposecmd 
+#ament_target_dependencies(getposecmd 
     ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
     
 add_executable(keyboardcontrol

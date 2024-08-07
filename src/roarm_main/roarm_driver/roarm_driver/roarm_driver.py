@@ -81,7 +81,7 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('roarm_driver')
         
-        self.declare_parameter('serial_port', '/dev/ttyUSB1')
+        self.declare_parameter('serial_port', '/dev/ttyUSB0')
         self.declare_parameter('baud_rate', 115200)
         
         serial_port_name = self.get_parameter('serial_port').get_parameter_value().string_value
@@ -152,7 +152,7 @@ class MinimalSubscriber(Node):
             
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
-            self.base_controller = BaseController('/dev/ttyUSB1', 115200)
+            self.base_controller = BaseController('/dev/ttyUSB0', 115200)
             time.sleep(0.1)
             self.base_controller.feedback_data()
             
