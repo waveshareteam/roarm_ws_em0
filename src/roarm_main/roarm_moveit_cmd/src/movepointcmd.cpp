@@ -19,7 +19,7 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::MovePointCmd::Reque
   // 设置目标位置和姿态
   geometry_msgs::msg::Pose target_pose;
   target_pose.position.x = request->x;
-  target_pose.position.y = request->y;
+  target_pose.position.y = -1*request->y;
   target_pose.position.z = request->z;
 
   cartesian_to_polar(1000*target_pose.position.x,1000*target_pose.position.y, &base_r, &BASE_point_RAD);
@@ -28,7 +28,7 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::MovePointCmd::Reque
   RCLCPP_INFO(logger, "BASE_point_RAD: %f, SHOULDER_point_RAD: %f, ELBOW_point_RAD: %f", BASE_point_RAD, -SHOULDER_point_RAD, ELBOW_point_RAD);
   RCLCPP_INFO(logger, "x: %f, y: %f, z: %f", request->x, request->y, request->z);
   // 定义目标关节值
-  std::vector<double> target = {BASE_point_RAD, -SHOULDER_point_RAD, ELBOW_point_RAD,0};
+  std::vector<double> target = {BASE_point_RAD, -SHOULDER_point_RAD, ELBOW_point_RAD};
   move_group.setJointValueTarget(target);
   // 规划并执行轨迹
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
@@ -48,7 +48,7 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::MovePointCmd::Reque
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<rclcpp::Node>("move_point_cmd_service");
+  auto node = std::make_shared<rclcpp::Node>("move_point_cmd_node");
 
   // 创建服务
   auto server = node->create_service<roarm_moveit::srv::MovePointCmd>("move_point_cmd", &handle_service);

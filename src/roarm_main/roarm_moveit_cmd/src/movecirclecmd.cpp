@@ -38,7 +38,7 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::MoveCircleCmd::Requ
   geometry_msgs::msg::Pose pose;
 
   double center_x = request->x;
-  double center_y = request->y;
+  double center_y = -1*request->y;
   double center_z = request->z;
   double radius = request->radius;
   double resolution = 100; 
@@ -85,7 +85,7 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::MoveCircleCmd::Requ
     simpleLinkageIkRad(l2, l3, base_r, 1000*target_pose.position.z);
 
     // 将关节角度作为目标设置给机械臂
-    std::vector<double> target = {BASE_point_RAD, -SHOULDER_point_RAD, ELBOW_point_RAD,0};
+    std::vector<double> target = {BASE_point_RAD, -SHOULDER_point_RAD, ELBOW_point_RAD};
     move_group.setJointValueTarget(target);
 
     // 执行轨迹

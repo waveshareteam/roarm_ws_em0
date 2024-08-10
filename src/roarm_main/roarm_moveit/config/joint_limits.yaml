@@ -23,7 +23,7 @@ joint_limits:
     max_velocity: 0
     has_acceleration_limits: false
     max_acceleration: 0
-  link3_to_link4:
+  link3_to_gripper_link:
     has_velocity_limits: false
     max_velocity: 0
     has_acceleration_limits: false

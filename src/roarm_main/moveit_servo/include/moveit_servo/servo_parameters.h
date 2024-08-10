@@ -72,7 +72,7 @@ struct ServoParameters
   // Properties of Servo calculations
   double override_velocity_scaling_factor{ 0.0 };
   // Properties of outgoing commands
-  std::string command_out_topic{ "/hand_controller/joint_trajectory" };
+  std::string hand_command_out_topic{ "/hand_controller/joint_trajectory" };
   double publish_period{ 0.034 };
   std::string command_out_type{ "trajectory_msgs/JointTrajectory" };
   bool publish_joint_positions{ true };
@@ -84,7 +84,7 @@ struct ServoParameters
   // MoveIt properties
   std::string move_group_name{ "hand" };
   std::string planning_frame{ "base_link" };
-  std::string ee_frame_name{ "link4" };
+  std::string ee_frame_name{ "hand_tcp" };
   bool is_primary_planning_scene_monitor = { true };
   std::string monitored_planning_scene_topic{
     planning_scene_monitor::PlanningSceneMonitor::DEFAULT_PLANNING_SCENE_TOPIC

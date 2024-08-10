@@ -148,7 +148,7 @@ void ServoParameters::declare(const std::string& ns,
 
   // Properties of outgoing commands
   node_parameters->declare_parameter(
-      ns + ".command_out_topic", ParameterValue{ parameters.command_out_topic },
+      ns + ".hand_command_out_topic", ParameterValue{ parameters.hand_command_out_topic },
       ParameterDescriptorBuilder{}.type(PARAMETER_STRING).description("Publish outgoing commands here"));
   node_parameters->declare_parameter(
       ns + ".publish_period", ParameterValue{ parameters.publish_period },
@@ -288,7 +288,7 @@ ServoParameters ServoParameters::get(const std::string& ns,
       node_parameters->get_parameter(ns + ".override_velocity_scaling_factor").as_double();
 
   // Properties of outgoing commands
-  parameters.command_out_topic = node_parameters->get_parameter(ns + ".command_out_topic").as_string();
+  parameters.hand_command_out_topic = node_parameters->get_parameter(ns + ".hand_command_out_topic").as_string();
   parameters.publish_period = node_parameters->get_parameter(ns + ".publish_period").as_double();
   parameters.command_out_type = node_parameters->get_parameter(ns + ".command_out_type").as_string();
   parameters.publish_joint_positions = node_parameters->get_parameter(ns + ".publish_joint_positions").as_bool();

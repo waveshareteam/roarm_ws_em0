@@ -134,12 +134,12 @@ ServoCalcs::ServoCalcs(const rclcpp::Node::SharedPtr& node,
   if (parameters_->command_out_type == "trajectory_msgs/JointTrajectory")
   {
     trajectory_outgoing_cmd_pub_ = node_->create_publisher<trajectory_msgs::msg::JointTrajectory>(
-        parameters_->command_out_topic, rclcpp::SystemDefaultsQoS());
+        parameters_->hand_command_out_topic, rclcpp::SystemDefaultsQoS());
   }
   else if (parameters_->command_out_type == "std_msgs/Float64MultiArray")
   {
     multiarray_outgoing_cmd_pub_ = node_->create_publisher<std_msgs::msg::Float64MultiArray>(
-        parameters_->command_out_topic, rclcpp::SystemDefaultsQoS());
+        parameters_->hand_command_out_topic, rclcpp::SystemDefaultsQoS());
   }
 
   // Publish status
