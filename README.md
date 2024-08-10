@@ -533,7 +533,7 @@ Pub data to the topic and use action to control the Gripper's position:
 
     ros2 topic pub /gripper_cmd /gripper_cmd "{data: 0.2}"
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715919259/video_to_markdown/images/youtube--gmcXta85clc-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/gmcXta85clc "")
+[![Control the Gripper to a Specified Position](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287232/video_to_markdown/images/youtube--uRUIMIWvNpw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uRUIMIWvNpw "Control the Gripper to a Specified Position")
 
 Here, x, y, and z are the coordinates of the target point in meters.
 
