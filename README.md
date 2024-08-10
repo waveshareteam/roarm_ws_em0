@@ -273,7 +273,7 @@ Run the following command to execute the robotic arm MoveIt2 demo. This demo inc
 
 Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the ground.
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287900/video_to_markdown/images/youtube--uUkncafp-y4-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uUkncafp-y4 "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723288182/video_to_markdown/images/youtube--CaaaiHL90ak-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/CaaaiHL90ak "")
 
 If the robotic arm is not displayed in Rviz2, click on the `Fixed Frame` option in the Displays window after launching Rviz2. Beside `map`, a triangle icon will appear; click on this icon, select `base_link`, and press Enter to confirm.
 
