@@ -238,7 +238,7 @@ Note: When you run the following command, the robot's URDF in Rviz2 will publish
 
     ros2 launch roarm_description display.launch.py
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910541/video_to_markdown/images/youtube--WgrSR6vae24-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/WgrSR6vae24 "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287900/video_to_markdown/images/youtube--uUkncafp-y4-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uUkncafp-y4 "")
 
 If you do not see the joint control panel, click the gear icon on the left to bring it to the forefront.
 
@@ -273,7 +273,7 @@ Run the following command to execute the robotic arm MoveIt2 demo. This demo inc
 
 Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the ground.
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910681/video_to_markdown/images/youtube--TXtlQPufbvo-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/TXtlQPufbvo "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287900/video_to_markdown/images/youtube--uUkncafp-y4-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uUkncafp-y4 "")
 
 If the robotic arm is not displayed in Rviz2, click on the `Fixed Frame` option in the Displays window after launching Rviz2. Beside `map`, a triangle icon will appear; click on this icon, select `base_link`, and press Enter to confirm.
 
@@ -303,7 +303,7 @@ Keep this terminal window active and use the following keys to control the robot
 
 ![image](images/key_ctrl.png)
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910731/video_to_markdown/images/youtube--0pKDJmgqTSY-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/0pKDJmgqTSY "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723288096/video_to_markdown/images/youtube--U_gI7XtKCb8-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/U_gI7XtKCb8 "")
 
 Coordinate Control:
 - Arrow Key ↑: Positive X direction
@@ -552,7 +552,7 @@ Call the service to make the robotic arm draw a circle at the specified position
 
     ros2 service call /move_circle_cmd roarm_moveit/srv/MoveCircleCmd "{x: 0.2, y: 0, z: 0, radius: 0.1}"
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715919281/video_to_markdown/images/youtube--I8LTp57vmJs-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/I8LTp57vmJs "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287696/video_to_markdown/images/youtube--ZcsHhUDnOKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/ZcsHhUDnOKw "")
 
 The x, y, and z parameters specify the center of the circle, and radius specifies the radius of the circle in meters.
 
