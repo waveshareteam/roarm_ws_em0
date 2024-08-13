@@ -271,11 +271,10 @@ Run the following command to execute the robotic arm MoveIt2 demo. This demo inc
 
     ros2 launch roarm_moveit interact.launch.py 
 
-Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the ground.
-
 When controlling the gripper, it should be selected as in the picture
 ![image](images/rviz_gripper.png)
 
+Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the ground.
 
 [![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723532378/video_to_markdown/images/youtube--BzLm0tmo1lw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/BzLm0tmo1lw "")
 
