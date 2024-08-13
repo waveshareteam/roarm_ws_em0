@@ -524,20 +524,20 @@ Here, x, y, and z are the coordinates of the target point in meters.
 
 By calling this service, you can control the robotic arm to move to the target position.
 
-### 8.3 Control the Gripper to a Specified Position
-Start the node for motion control (which receives the target position):
+### 8.3 Control the gripper to the specified radian position
+Start the gripper motion control node (receive the target radian position):
 
     ros2 run roarm_moveit_cmd setgrippercmd
 
-Pub data to the topic and use action to control the Gripper's position:
+Publish data to a topic and use actions to control the radian position of the gripper:
 
     ros2 topic pub /gripper_cmd /gripper_cmd "{data: 0.2}"
 
 [![Control the Gripper to a Specified Position](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287232/video_to_markdown/images/youtube--uRUIMIWvNpw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uRUIMIWvNpw "Control the Gripper to a Specified Position")
 
-Here, data are the coordinates of the target point in meters.
+Here, the data is the coordinates of the target point of the gripper, in radians.
 
-By calling this service, you can control the robotic arm gripper to move to the target position.
+By invoking this service, you can control the position of the robotic arm gripper to move the target radian.
 
 ### 8.4 Draw a Circle at a Fixed Height
 In Rviz2, click Add, add RobotModel, and in the RobotModel tab, find Description Topic to view the trajectory of the end-effector hand_tcp.
