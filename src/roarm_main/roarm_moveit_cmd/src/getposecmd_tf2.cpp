@@ -5,11 +5,13 @@
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 #include <tf2_ros/transform_listener.h>
-#include "roarm_moveit/srv/get_pose_cmd.hpp" // 包含你定义的服务头文件
+#include "roarm_moveit/srv/get_pose_cmd.hpp"
 #include <iostream>
 #include <cmath>
+#include <iomanip>
+#include <sstream> 
 
-geometry_msgs::msg::Pose hand_pose;  // 全局变量存储手的位姿
+geometry_msgs::msg::Pose hand_pose;  
 
 class RobotPosePublisher : public rclcpp::Node
 {
@@ -31,10 +33,13 @@ public:
             publisher_ = this->create_publisher<geometry_msgs::msg::Pose>("hand_pose", 1);
             
             transformStamped = tf_buffer_->lookupTransform(base_frame, end_effector_frame, tf2::TimePointZero);
- 
-            hand_pose.position.x = transformStamped.transform.translation.x;
-            hand_pose.position.y = transformStamped.transform.translation.y;
-            hand_pose.position.z = transformStamped.transform.translation.z - 0.13381;
+            
+            ss_x << std::fixed << std::setprecision(6) << transformStamped.transform.translation.x;
+            ss_y << std::fixed << std::setprecision(6) << transformStamped.transform.translation.y;
+            ss_z << std::fixed << std::setprecision(6) << (transformStamped.transform.translation.z - 0.13381);
+            hand_pose.position.x = std::stof(ss_x.str());
+            hand_pose.position.y = std::stof(ss_y.str());
+            hand_pose.position.z = std::stof(ss_z.str());
             publisher_->publish(hand_pose);
         }
         catch (tf2::TransformException &ex)
@@ -48,6 +53,7 @@ private:
     std::string end_effector_frame = "hand_tcp"; 
     std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
     std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::stringstream ss_x, ss_y, ss_z;
 };
 
 void handle_service(const std::shared_ptr<roarm_moveit::srv::GetPoseCmd::Request> request,
@@ -77,4 +83,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-

@@ -1,5 +1,7 @@
 #include <chrono>
 #include <thread>
+#include <iomanip>
+#include <sstream> 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/msg/collision_object.hpp>
@@ -13,9 +15,15 @@ void handle_service(const std::shared_ptr<roarm_moveit::srv::GetPoseCmd::Request
                     std::shared_ptr<roarm_moveit::srv::GetPoseCmd::Response> response)
 {
   rclcpp::Node::SharedPtr node = std::make_shared<rclcpp::Node>("get_pose_cmd_service_node");
-  response->x=hand_pose.position.x;
-  response->y=hand_pose.position.y;
-  response->z=hand_pose.position.z - 0.13381;
+  std::stringstream ss_x, ss_y, ss_z;
+
+  ss_x << std::fixed << std::setprecision(6) << hand_pose.position.x;
+  ss_y << std::fixed << std::setprecision(6) << hand_pose.position.y;
+  ss_z << std::fixed << std::setprecision(6) << (hand_pose.position.z - 0.13381);
+
+  response->x = std::stof(ss_x.str());
+  response->y = std::stof(ss_y.str());
+  response->z = std::stof(ss_z.str());
   publisher_->publish(hand_pose);
 }
 
@@ -54,4 +62,3 @@ int main(int argc, char** argv)
   spinner.join();
   return 0;
 }
-
