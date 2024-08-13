@@ -505,7 +505,7 @@ You can change the robotic arm's posture by dragging the end-effector's drag bal
 ### 8.1 Get Current Position
 Open a new terminal to start the node that retrieves the current position:
 
-    ros2 run roarm_moveit_cmd getposecmd_moveit2
+    ros2 run roarm_moveit_cmd getposecmd
 
 Open another terminal to call the service that gets the current position:
 
