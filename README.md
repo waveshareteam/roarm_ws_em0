@@ -292,6 +292,7 @@ Enter the following command to start the nodes related to controlling the roboti
     ros2 launch moveit_servo demo.launch.py
 
 Open a new terminal and run the following command. 
+
     ros2 run roarm_moveit_cmd setgrippercmd
 
 ### 5.1 Keyboard Control
