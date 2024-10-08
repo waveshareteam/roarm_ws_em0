@@ -7,6 +7,10 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
 
 
+    gripper_controller:
+      type: position_controllers/GripperActionController
+
+
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
@@ -16,9 +20,11 @@ hand_controller:
       - base_link_to_link1
       - link1_to_link2
       - link2_to_link3
-      - link3_to_link4
     command_interfaces:
       - position
     state_interfaces:
       - position
       - velocity
+gripper_controller:
+  ros__parameters:
+    joint: link3_to_gripper_link

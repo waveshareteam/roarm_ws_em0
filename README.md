@@ -202,7 +202,7 @@ You should now see a new device like `/dev/ttyUSB0` at the end of the list. If n
 ### 3.2 Change the Serial Port Device
 If the detected serial port device is `/dev/ttyUSB0`, you can skip this section and proceed to **3.3** Running the Robotic Arm Driver Node.
 
-If the serial port device is not `/dev/ttyUSB0`, you need to update the serial port device name in the Python script `~/roarm_ws_em0/src/roarm_main/roarm_driver/roarm_driver/roarm_driver.py` by changing line 14:
+If the serial port device is not `/dev/ttyUSB0`, you need to update the serial port device name in the Python script `~/roarm_ws_em0/src/roarm_main/roarm_driver/roarm_driver/roarm_driver.py` by changing line 15:
 
     self.declare_parameter('serial_port', '/dev/ttyUSB0')
 
@@ -238,7 +238,7 @@ Note: When you run the following command, the robot's URDF in Rviz2 will publish
 
     ros2 launch roarm_description display.launch.py
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910541/video_to_markdown/images/youtube--WgrSR6vae24-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/WgrSR6vae24 "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287900/video_to_markdown/images/youtube--uUkncafp-y4-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uUkncafp-y4 "")
 
 If you do not see the joint control panel, click the gear icon on the left to bring it to the forefront.
 
@@ -269,11 +269,14 @@ In the terminal window where Rviz2 is currently running, press `Ctrl + C` to clo
 
 Run the following command to execute the robotic arm MoveIt2 demo. This demo includes inverse kinematics solving, allowing you to interact with the robotic arm by dragging the end effector:
 
-    ros2 launch roarm_moveit interact.launch.py rviz_config:=~/roarm_ws_em0/src/roarm_main/roarm_moveit/config/interact.rviz
+    ros2 launch roarm_moveit interact.launch.py 
+
+When controlling the gripper, it should be selected as in the picture
+![image](images/rviz_gripper.png)
 
 Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the ground.
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910681/video_to_markdown/images/youtube--TXtlQPufbvo-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/TXtlQPufbvo "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723532378/video_to_markdown/images/youtube--BzLm0tmo1lw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/BzLm0tmo1lw "")
 
 If the robotic arm is not displayed in Rviz2, click on the `Fixed Frame` option in the Displays window after launching Rviz2. Beside `map`, a triangle icon will appear; click on this icon, select `base_link`, and press Enter to confirm.
 
@@ -291,6 +294,10 @@ Enter the following command to start the nodes related to controlling the roboti
 
     ros2 launch moveit_servo demo.launch.py
 
+Open a new terminal and run the following command. 
+
+    ros2 run roarm_moveit_cmd setgrippercmd
+
 ### 5.1 Keyboard Control
 Open a new terminal and run the following command. This terminal window should remain active as it will receive control commands from the keyboard:
 
@@ -300,7 +307,7 @@ Keep this terminal window active and use the following keys to control the robot
 
 ![image](images/key_ctrl.png)
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715910731/video_to_markdown/images/youtube--0pKDJmgqTSY-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/0pKDJmgqTSY "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723288096/video_to_markdown/images/youtube--U_gI7XtKCb8-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/U_gI7XtKCb8 "")
 
 Coordinate Control:
 - Arrow Key ↑: Positive X direction
@@ -475,12 +482,12 @@ Implementing Security Features: Add authentication and authorization mechanisms 
 By customizing the ROS2Web_app, you can create a robust and user-friendly interface to interact with your ROS2 robots, making it easier to develop and test robotic applications.
 
 
-## 8 Command Control (Invoking ROS2 Services)
+## 8 Command Control (Invoking ROS2 Services , Actions)
 In this chapter, you will learn how to control the robotic arm using command-based control by invoking ROS2 services. Close all terminal windows from the previous chapters, except for the one running roarm_driver.
 
 Run the launch file for command control, which relies on MoveIt2 for motion planning:
 
-    ros2 launch roarm_moveit_cmd command_control.launch.py rviz_config:=~/roarm_ws_em0/src/roarm_main/roarm_moveit_cmd/config/command_control.rviz
+    ros2 launch roarm_moveit_cmd command_control.launch.py
 
 Note: After executing this command, the robotic arm will move, with the forearm extending forward and parallel to the horizontal plane.
 
@@ -498,7 +505,7 @@ You can change the robotic arm's posture by dragging the end-effector's drag bal
 ### 8.1 Get Current Position
 Open a new terminal to start the node that retrieves the current position:
 
-    ros2 run roarm_driver roarm_driver
+    ros2 run roarm_moveit_cmd getposecmd
 
 Open another terminal to call the service that gets the current position:
 
@@ -521,10 +528,25 @@ Here, x, y, and z are the coordinates of the target point in meters.
 
 By calling this service, you can control the robotic arm to move to the target position.
 
-### 8.3 Draw a Circle at a Fixed Height
-In Rviz2, click Add, add RobotModel, and in the RobotModel tab, find Description Topic to view the trajectory of the end-effector Link4.
+### 8.3 Control the gripper to the specified radian position
+Start the gripper motion control node (receive the target radian position):
 
-![image](images/rviz_link4.png)
+    ros2 run roarm_moveit_cmd setgrippercmd
+
+Publish data to a topic and use actions to control the radian position of the gripper:
+
+    ros2 topic pub /gripper_cmd /gripper_cmd "{data: 0.2}"
+
+[![Control the Gripper to a Specified Position](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287232/video_to_markdown/images/youtube--uRUIMIWvNpw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uRUIMIWvNpw "Control the Gripper to a Specified Position")
+
+Here, the data is the coordinates of the target point of the gripper, in radians.
+
+By invoking this service, you can control the position of the robotic arm gripper to move the target radian.
+
+### 8.4 Draw a Circle at a Fixed Height
+In Rviz2, click Add, add RobotModel, and in the RobotModel tab, find Description Topic to view the trajectory of the end-effector hand_tcp.
+
+![image](images/rviz_hand_tcp.png)
 
 Start the node to draw a circle:
 
@@ -534,7 +556,7 @@ Call the service to make the robotic arm draw a circle at the specified position
 
     ros2 service call /move_circle_cmd roarm_moveit/srv/MoveCircleCmd "{x: 0.2, y: 0, z: 0, radius: 0.1}"
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1715919281/video_to_markdown/images/youtube--I8LTp57vmJs-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/I8LTp57vmJs "")
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287696/video_to_markdown/images/youtube--ZcsHhUDnOKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/ZcsHhUDnOKw "")
 
 The x, y, and z parameters specify the center of the circle, and radius specifies the radius of the circle in meters.
 

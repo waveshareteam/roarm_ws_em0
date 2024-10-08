@@ -4,12 +4,15 @@ import json
 import serial
 from serial import SerialException
 from sensor_msgs.msg import JointState
+from geometry_msgs.msg import Pose
 from roarm_moveit.srv import GetPoseCmd
 import queue
 import threading
 import logging
 import time
 import math
+
+serial_port = "/dev/ttyUSB0"
 
 class ReadLine:
     def __init__(self, s):
@@ -81,7 +84,7 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('roarm_driver')
         
-        self.declare_parameter('serial_port', '/dev/ttyUSB1')
+        self.declare_parameter('serial_port', serial_port)
         self.declare_parameter('baud_rate', 115200)
         
         serial_port_name = self.get_parameter('serial_port').get_parameter_value().string_value
@@ -106,10 +109,16 @@ class MinimalSubscriber(Node):
             self.listener_callback,
             10)
             
-        self.srv = self.create_service(
-            GetPoseCmd, 
-            'get_pose_cmd', 
-            self.handle_get_pose_cmd)
+        self.pose_subscription = self.create_subscription(
+            Pose,
+            'hand_pose',
+            self.pose_subscription_callback,
+            10)
+                        
+        #self.srv = self.create_service(
+        #    GetPoseCmd, 
+        #    'get_pose_cmd', 
+        #    self.handle_get_pose_cmd)
             
     def listener_callback(self, msg):
 
@@ -126,10 +135,10 @@ class MinimalSubscriber(Node):
         velocity = msg.velocity
         effort = msg.effort
 
-        base = position[name.index('base_link_to_link1')]
+        base = -position[name.index('base_link_to_link1')]
         shoulder = -position[name.index('link1_to_link2')]
-        elbow = position[name.index('link2_to_link3')]
-        hand =  3.1415926 - position[name.index('link3_to_link4')]
+        elbow = position[name.index('link2_to_link3')] 
+        hand =  3.1415926 - position[name.index('link3_to_gripper_link')]
 
         data = json.dumps({
             'T': 102, 
@@ -152,7 +161,7 @@ class MinimalSubscriber(Node):
             
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
-            self.base_controller = BaseController('/dev/ttyUSB1', 115200)
+            self.base_controller = BaseController(serial_port, 115200)
             time.sleep(0.1)
             self.base_controller.feedback_data()
             
@@ -172,7 +181,27 @@ class MinimalSubscriber(Node):
             response.y = 0.0
             response.z = 0.0
             return response
-        
+
+    def pose_subscription_callback(self, msg):
+        try:
+            request_data = json.dumps({'T': 105}) + "\n"
+            self.serial_port.write(request_data.encode())
+            self.base_controller = BaseController(serial_port, 115200)
+            time.sleep(0.1)
+            self.base_controller.feedback_data()
+            
+            if self.base_controller.base_data["T"] == 1051:
+               feedback = self.base_controller.base_data
+               feedback['x'] /= 1000 
+               feedback['y'] /= 1000
+               feedback['z'] /= 1000  
+               if float(feedback["x"]) != 0.0 or float(feedback["y"]) != 0.0 or float(feedback["z"]) != 0.0:
+                  self.get_logger().info(f'Received feedback from serial port: {feedback}')
+            time.sleep(0.1)
+
+        except Exception as e:
+            self.get_logger().error(f'Error communicating with serial port: {str(e)}')
+                    
 def main(args=None):
     rclpy.init(args=args)
     
@@ -187,4 +216,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-

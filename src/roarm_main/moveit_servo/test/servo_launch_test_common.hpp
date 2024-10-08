@@ -243,14 +243,14 @@ public:
     if (command_type == "trajectory_msgs/JointTrajectory")
     {
       sub_trajectory_cmd_output_ = node_->create_subscription<trajectory_msgs::msg::JointTrajectory>(
-          resolveServoTopicName(servo_parameters_->command_out_topic), rclcpp::SystemDefaultsQoS(),
+          resolveServoTopicName(servo_parameters_->hand_command_out_topic), rclcpp::SystemDefaultsQoS(),
           [this](const trajectory_msgs::msg::JointTrajectory::ConstSharedPtr& msg) { return trajectoryCommandCB(msg); });
       return true;
     }
     else if (command_type == "std_msgs/Float64MultiArray")
     {
       sub_array_cmd_output_ = node_->create_subscription<std_msgs::msg::Float64MultiArray>(
-          resolveServoTopicName(servo_parameters_->command_out_topic), rclcpp::SystemDefaultsQoS(),
+          resolveServoTopicName(servo_parameters_->hand_command_out_topic), rclcpp::SystemDefaultsQoS(),
           [this](const std_msgs::msg::Float64MultiArray::ConstSharedPtr& msg) { return arrayCommandCB(msg); });
       return true;
     }

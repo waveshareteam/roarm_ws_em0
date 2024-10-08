@@ -67,13 +67,27 @@ ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 ament_export_include_directories(include)
 
 # Define executables
-add_executable(getposecmd 
-    src/getposecmd.cpp)
-target_include_directories(getposecmd 
-    PUBLIC include)
-ament_target_dependencies(getposecmd 
+add_executable(getposecmd_tf2 
+    src/getposecmd_tf2.cpp)
+target_include_directories(getposecmd_tf2 
+   PUBLIC include)
+ament_target_dependencies(getposecmd_tf2 
     ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
-    
+
+#add_executable(getposecmd_moveit2 
+#    src/getposecmd_moveit2.cpp)
+#target_include_directories(getposecmd_moveit2 
+#   PUBLIC include)
+#ament_target_dependencies(getposecmd_moveit2
+#    ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
+
+add_executable(getposecmd
+    src/getposecmd_moveit2.cpp)
+target_include_directories(getposecmd
+   PUBLIC include)
+ament_target_dependencies(getposecmd
+    ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
+        
 add_executable(keyboardcontrol
     src/keyboardcontrol.cpp)
 target_include_directories(keyboardcontrol
@@ -103,12 +117,19 @@ target_include_directories(webappcontrol
 ament_target_dependencies(webappcontrol 
     ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
 
-         
+add_executable(setgrippercmd
+    src/setgrippercmd.cpp)
+target_include_directories(setgrippercmd
+    PUBLIC include)
+ament_target_dependencies(setgrippercmd 
+    ${THIS_PACKAGE_INCLUDE_DEPENDS} Boost)
+             
 # Install targets
-install(TARGETS getposecmd keyboardcontrol movepointcmd movecirclecmd webappcontrol 
+install(TARGETS getposecmd getposecmd_tf2 keyboardcontrol movepointcmd movecirclecmd webappcontrol setgrippercmd
   DESTINATION lib/${PROJECT_NAME}
 )
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
   
 ament_package()
+
 

@@ -41,11 +41,13 @@
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/twist_stamped.hpp>
 #include <control_msgs/msg/joint_jog.hpp>
+#include <std_msgs/msg/float32.hpp>
 
 #include <signal.h>
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+#include <chrono>
 
 // Define used keys
 #define KEYCODE_RIGHT 0x43
@@ -64,8 +66,9 @@
 // Some constants used in the Servo Teleop demo
 const std::string TWIST_TOPIC = "/servo_node/delta_twist_cmds";
 const std::string JOINT_TOPIC = "/servo_node/delta_joint_cmds";
+const std::string GRIPPER_TOPIC = "/gripper_cmd";
 const size_t ROS_QUEUE_SIZE = 10;
-const std::string EEF_FRAME_ID = "hand";
+const std::string EEF_FRAME_ID = "hand_tcp";
 const std::string BASE_FRAME_ID = "base_link";
 
 // A class for reading the key inputs from the terminal
@@ -111,11 +114,12 @@ public:
 
 private:
   void spin();
-
+  double gripper_value_; 
   rclcpp::Node::SharedPtr nh_;
 
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr twist_pub_;
   rclcpp::Publisher<control_msgs::msg::JointJog>::SharedPtr joint_pub_;
+  rclcpp::Publisher<std_msgs::msg::Float32>::SharedPtr gripper_pub_;
 
   std::string frame_to_publish_;
   double joint_vel_cmd_;
@@ -127,6 +131,7 @@ KeyboardServo::KeyboardServo() : frame_to_publish_(BASE_FRAME_ID), joint_vel_cmd
 
   twist_pub_ = nh_->create_publisher<geometry_msgs::msg::TwistStamped>(TWIST_TOPIC, ROS_QUEUE_SIZE);
   joint_pub_ = nh_->create_publisher<control_msgs::msg::JointJog>(JOINT_TOPIC, ROS_QUEUE_SIZE);
+  gripper_pub_ = nh_->create_publisher<std_msgs::msg::Float32>(GRIPPER_TOPIC, ROS_QUEUE_SIZE);
 }
 
 KeyboardReader input;
@@ -166,13 +171,14 @@ int KeyboardServo::keyLoop()
   char c;
   bool publish_twist = false;
   bool publish_joint = false;
+  bool publish_gripper = false;
 
   std::thread{ std::bind(&KeyboardServo::spin, this) }.detach();
 
   puts("Reading from keyboard");
   puts("---------------------------");
   puts("Use arrow keys to control x,y and the '.'or';' keys to control z to Cartesian jog");
-  puts("Use 1|2|3|4|keys to joint jog. 'R' to reverse the direction of jogging.");
+  puts("Use 1|2|3|keys to joint jog; Use 4 key to control gripper; 'R' to reverse the direction");
   puts("'Q' to quit.");
 
   for (;;)
@@ -193,6 +199,7 @@ int KeyboardServo::keyLoop()
     // // Create the messages we might publish
     auto twist_msg = std::make_unique<geometry_msgs::msg::TwistStamped>();
     auto joint_msg = std::make_unique<control_msgs::msg::JointJog>();
+    auto gripper_msg = std::make_unique<std_msgs::msg::Float32>();
 
     // Use read key-press
     switch (c)
@@ -247,9 +254,26 @@ int KeyboardServo::keyLoop()
         break;
       case KEYCODE_4:
         RCLCPP_DEBUG(nh_->get_logger(), "4");
-        joint_msg->joint_names.push_back("link3_to_link4");
-        joint_msg->velocities.push_back(joint_vel_cmd_);
-        publish_joint = true;
+ 	if (joint_vel_cmd_ > 0)
+ 	{
+ 	  gripper_value_ += 0.01;
+  	}
+ 	else if (joint_vel_cmd_ < 0)
+ 	{
+ 	  gripper_value_ -= 0.01;
+ 	}
+  	if (gripper_value_ > 1.5)
+  	{
+  	  gripper_value_ = 1.5;
+  	  puts("MAX 1.5");
+  	}
+  	else if (gripper_value_ < 0.0)
+ 	{
+ 	  gripper_value_ = 0.0;
+ 	  puts("MIN 0,0");
+ 	}
+  	gripper_msg->data = gripper_value_;
+  	publish_gripper = true;
         break;
       case KEYCODE_R:
         RCLCPP_DEBUG(nh_->get_logger(), "R");
@@ -274,6 +298,10 @@ int KeyboardServo::keyLoop()
       joint_msg->header.frame_id = BASE_FRAME_ID;
       joint_pub_->publish(std::move(joint_msg));
       publish_joint = false;
+    }else if (publish_gripper)
+    {
+      gripper_pub_->publish(std::move(gripper_msg));
+      publish_gripper = false;
     }
   }
 

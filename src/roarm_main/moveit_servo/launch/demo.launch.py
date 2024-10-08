@@ -88,7 +88,13 @@ def generate_launch_description():
         executable="spawner",
         arguments=["hand_controller", "-c", "/controller_manager"],
     )
-
+    
+    gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["gripper_controller", "-c", "/controller_manager"],
+    )
+    
     # Launch as much as possible in components
     container = ComposableNodeContainer(
         name="moveit_servo_demo_container",
@@ -153,6 +159,7 @@ def generate_launch_description():
             ros2_control_node,
             joint_state_broadcaster_spawner,
             hand_controller_spawner,
+            gripper_controller_spawner,
             servo_node,
             container,
         ]

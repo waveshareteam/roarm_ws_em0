@@ -5,6 +5,7 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 moveit_simple_controller_manager:
   controller_names:
     - hand_controller
+    - gripper_controller
 
   hand_controller:
     type: FollowJointTrajectory
@@ -14,4 +15,11 @@ moveit_simple_controller_manager:
       - base_link_to_link1
       - link1_to_link2
       - link2_to_link3
-      - link3_to_link4
+    action_ns: follow_joint_trajectory
+    default: true
+  gripper_controller:
+    type: GripperCommand
+    joints:
+      - link3_to_gripper_link
+    action_ns: gripper_cmd
+    default: true
