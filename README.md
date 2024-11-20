@@ -535,7 +535,7 @@ Start the gripper motion control node (receive the target radian position):
 
 Publish data to a topic and use actions to control the radian position of the gripper:
 
-    ros2 topic pub /gripper_cmd /gripper_cmd "{data: 0.2}"
+    ros2 topic pub /gripper_cmd std_msgs/msg/Float32  "{data: 0.0}" -1
 
 [![Control the Gripper to a Specified Position](https://res.cloudinary.com/marcomontalbano/image/upload/v1723287232/video_to_markdown/images/youtube--uRUIMIWvNpw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/uRUIMIWvNpw "Control the Gripper to a Specified Position")
 
