@@ -199,15 +199,19 @@ Check the serial devices again:
 
 You should now see a new device like `/dev/ttyUSB0` at the end of the list. If not, disconnect and reconnect the robotic arm.
 
-### 3.2 Change the Serial Port Device
-If the detected serial port device is `/dev/ttyUSB0`, you can skip this section and proceed to **3.3** Running the Robotic Arm Driver Node.
+### 3.2 Update the Serial Port Device
 
-If the serial port device is not `/dev/ttyUSB0`, you need to update the serial port device name in the Python script `~/roarm_ws_em0/src/roarm_main/roarm_driver/roarm_driver/roarm_driver.py` by changing line 15:
+Grant read and write permissions to the serial device using the following command (replace `/dev/ttyUSB0` with your actual device path):
 
-    self.declare_parameter('serial_port', '/dev/ttyUSB0')
+    sudo chmod 666 /dev/ttyUSB0
+
+If the serial port device is not `/dev/ttyUSB0`, you can either provide the proper device name at launch and/or you can update the serial port device name in the launch file `~/roarm_ws_em0/src/roarm_main/roarm_driver/launch/roarm.launch.py` by changing line 10:
+
+    default_value='/dev/ttyUSB0',
 
 to your actual serial port device name.
-![image](images/roarm_driver.py.png)
+<img src="images/roarm.launch.py.png" alt="editor" width="600"/>
+
 Then, recompile the ROS2 packages in the terminal:
 
     cd ~/roarm_ws_em0/
@@ -217,15 +221,13 @@ Then, recompile the ROS2 packages in the terminal:
 ### 3.3 Running the Robotic Arm Driver Node
 According to the ROS2 official documentation, it is not recommended to run ROS2 nodes in the same terminal where you compile the packages. Open a new terminal window using `Ctrl + Alt + T`.
 
-Grant serial port permissions and run the ROS2 robotic arm driver node:
+Launch the driver node:
 
-Grant read and write permissions to the serial device using the following command (replace `/dev/ttyUSB0` with your actual device path):
+    ros2 launch roarm_driver roarm.launch.py #if you have the default port or edited the launch file
 
-    sudo chmod 666 /dev/ttyUSB0
+Or, override the serial port name at launch with something like:
 
-Run the driver node:
-
-    ros2 run roarm_driver roarm_driver
+    ros2 launch roarm_driver roarm.launch.py serial_port:=/dev/ttyUSB2 
 
 ### 3.4 Viewing the Model Joints
 Open a new terminal window with `Ctrl + Alt + T`.
