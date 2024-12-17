@@ -127,16 +127,18 @@ class MinimalSubscriber(Node):
             },
             'frame_id': msg.header.frame_id,
         }
+        namespace = self.get_namespace()
+        namespace_prefix = f"{namespace}/" if namespace != "/" else ""
         
         name = msg.name
         position = msg.position
         velocity = msg.velocity
         effort = msg.effort
 
-        base = -position[name.index('base_link_to_link1')]
-        shoulder = -position[name.index('link1_to_link2')]
-        elbow = position[name.index('link2_to_link3')] 
-        hand =  3.1415926 - position[name.index('link3_to_gripper_link')]
+        base = -position[name.index(f"{namespace_prefix}base_link_to_link1")]
+        shoulder = -position[name.index(f"{namespace_prefix}link1_to_link2")]
+        elbow = position[name.index(f"{namespace_prefix}link2_to_link3")]
+        hand = 3.1415926 - position[name.index(f"{namespace_prefix}link3_to_gripper_link")]
 
         data = json.dumps({
             'T': 102, 
