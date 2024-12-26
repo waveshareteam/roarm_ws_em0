@@ -246,6 +246,10 @@ If you do not see the joint control panel, click the gear icon on the left to br
 
 You can control the movement of each joint by dragging the sliders in the control panel. This is the simplest and most basic method to control the robotic arm in ROS2.
 
+You can control the LED on the gripper of the robot arm through the following command,data is an integer, the range is [0-255].
+
+    ros2 topic pub /led_ctrl std_msgs/msg/Float32 {"data: 0"} -1
+
 ### 3.5 Manipulating the View in Rviz2
 In Rviz2, you can adjust the view of the robot model using the mouse:
 
