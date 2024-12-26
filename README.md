@@ -204,7 +204,7 @@ If the detected serial port device is `/dev/ttyUSB0`, you can skip this section 
 
 If the serial port device is not `/dev/ttyUSB0`, you need to update the serial port device name in the Python script `~/roarm_ws_em0/src/roarm_main/roarm_driver/roarm_driver/roarm_driver.py` by changing line 15:
 
-    self.declare_parameter('serial_port', '/dev/ttyUSB0')
+    serial_port = "/dev/ttyUSB0"
 
 to your actual serial port device name.
 ![image](images/roarm_driver.py.png)
@@ -243,6 +243,10 @@ Note: When you run the following command, the robot's URDF in Rviz2 will publish
 If you do not see the joint control panel, click the gear icon on the left to bring it to the forefront.
 
 You can control the movement of each joint by dragging the sliders in the control panel. This is the simplest and most basic method to control the robotic arm in ROS2.
+
+You can control the LED on the gripper of the robot arm through the following command,data is an integer, the range is [0-255].
+
+    ros2 topic pub /led_ctrl std_msgs/msg/Float32 {"data: 0"} -1
 
 ### 3.5 Manipulating the View in Rviz2
 In Rviz2, you can adjust the view of the robot model using the mouse:

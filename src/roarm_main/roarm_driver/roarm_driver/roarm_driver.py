@@ -3,9 +3,9 @@ from rclpy.node import Node
 import json
 import serial
 from serial import SerialException
+from std_msgs.msg import Float32
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Pose
-from roarm_moveit.srv import GetPoseCmd
 import queue
 import threading
 import logging
@@ -79,7 +79,7 @@ class BaseController:
     def base_json_ctrl(self, input_json):
         self.send_command(input_json)
         
-class MinimalSubscriber(Node):
+class RoarmDriver(Node):
 
     def __init__(self):
         super().__init__('roarm_driver')
@@ -92,9 +92,8 @@ class MinimalSubscriber(Node):
         
         try:
             self.serial_port = serial.Serial(serial_port_name, baud_rate)
-            self.get_logger().info(f"{serial_port_name}，{baud_rate}。")
+            self.get_logger().info(f"{serial_port_name},{baud_rate}.")
             
-            # 发送初始指令
             start_data = json.dumps({'T': 605, "cmd": 0}) + "\n"
             self.serial_port.write(start_data.encode())
             time.sleep(0.1)
@@ -103,24 +102,11 @@ class MinimalSubscriber(Node):
             self.get_logger().error(f"{serial_port_name}：{e}")
             return
 
-        self.subscription = self.create_subscription(
-            JointState,
-            'joint_states',
-            self.listener_callback,
-            10)
-            
-        self.pose_subscription = self.create_subscription(
-            Pose,
-            'hand_pose',
-            self.pose_subscription_callback,
-            10)
-                        
-        #self.srv = self.create_service(
-        #    GetPoseCmd, 
-        #    'get_pose_cmd', 
-        #    self.handle_get_pose_cmd)
-            
-    def listener_callback(self, msg):
+        self.joint_states_sub = self.create_subscription(JointState, 'joint_states', self.joint_states_callback,10)  
+        self.pose_sub = self.create_subscription(Pose, 'hand_pose', self.pose_callback,10)
+        self.led_ctrl_sub = self.create_subscription(Float32, 'led_ctrl', self.led_ctrl_callback, 10)  
+                             
+    def joint_states_callback(self, msg):
 
         header = {
             'stamp': {
@@ -156,33 +142,7 @@ class MinimalSubscriber(Node):
         except SerialException as e:
             self.get_logger().error(f"{e}")
 
-    def handle_get_pose_cmd(self, request, response):
-        try:
-            
-            request_data = json.dumps({'T': 105}) + "\n"
-            self.serial_port.write(request_data.encode())
-            self.base_controller = BaseController(serial_port, 115200)
-            time.sleep(0.1)
-            self.base_controller.feedback_data()
-            
-            if self.base_controller.base_data["T"] == 1051:
-               feedback = self.base_controller.base_data
-               if float(feedback["x"]) != 0.0 or float(feedback["y"]) != 0.0 or float(feedback["z"]) != 0.0:
-                  self.get_logger().info(f'Received feedback from serial port: {feedback}')
-                  response.x = float(feedback["x"])/1000.0
-                  response.y = float(feedback["y"])/1000.0
-                  response.z = float(feedback["z"])/1000.0
-                  return response
-            time.sleep(0.1)
-
-        except Exception as e:
-            self.get_logger().error(f'Error communicating with serial port: {str(e)}')
-            response.x = 0.0
-            response.y = 0.0
-            response.z = 0.0
-            return response
-
-    def pose_subscription_callback(self, msg):
+    def pose_callback(self, msg):
         try:
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
@@ -201,16 +161,25 @@ class MinimalSubscriber(Node):
 
         except Exception as e:
             self.get_logger().error(f'Error communicating with serial port: {str(e)}')
-                    
+
+    def led_ctrl_callback(self, msg):
+        data = msg.data
+        
+        led_ctrl_data = json.dumps({
+            'T': 114, 
+            "led": data,
+        }) + "\n"    
+        self.serial_port.write(led_ctrl_data.encode())
+                                
 def main(args=None):
     rclpy.init(args=args)
     
-    minimal_subscriber = MinimalSubscriber()
+    roarm_driver = RoarmDriver()
     
-    if minimal_subscriber.serial_port.is_open:
-        rclpy.spin(minimal_subscriber)
-        minimal_subscriber.destroy_node()
-        minimal_subscriber.serial_port.close()
+    if roarm_driver.serial_port.is_open:
+        rclpy.spin(roarm_driver)
+        roarm_driver.destroy_node()
+        roarm_driver.serial_port.close()
     
     rclpy.shutdown()
 
