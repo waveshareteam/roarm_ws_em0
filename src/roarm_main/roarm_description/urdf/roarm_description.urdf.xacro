@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="roarm_description">
 
-  <!-- Define properties for base_link name and prefix -->
+  <!-- Define properties for base_link name, prefix and end tool rotation -->
   <xacro:property name="base_link_name" value="${base_link_name:=base_link}" />
   <xacro:property name="prefix" value="${prefix:=''}" />
+  <xacro:property name="end_rot" value="${end_rot:='0'}" />
 
   <!-- Macro to instantiate the robot arm with parameterized names -->
-  <xacro:macro name="roarm_robot_arm" params="base_link_name prefix">
+  <xacro:macro name="roarm_robot_arm" params="base_link_name prefix end_rot">
 
     <!-- Base Link -->
     <link name="${prefix}${base_link_name}">
@@ -176,7 +177,7 @@
           rpy="0 0 0" />
         <geometry>
           <mesh
-            filename="package://roarm_description/meshes/link3.STL" />
+            filename="package://roarm_description/meshes/link3_${end_rot}.STL" />
         </geometry>
         <material name="">
           <color
@@ -250,9 +251,26 @@
 
     <!-- Joint: link3 to gripper_link -->
     <joint name="${prefix}link3_to_gripper_link" type="revolute">
-      <origin
-        xyz="0.002906 -0.21599 -0.00066683"
-        rpy="-1.5708 0 -1.5708" />
+          <xacro:if value="${end_rot == 90}">
+            <origin
+              xyz="-0.002906 -0.21599 0.00466683"
+              rpy="0 0 -1.5708" />
+          </xacro:if>
+          <xacro:if value="${end_rot == 180}">
+            <origin
+              xyz="-0.007906 -0.21599 -0.00066683"
+              rpy="1.5708 0 -1.5708" />
+          </xacro:if>
+          <xacro:if value="${end_rot == 270}">
+            <origin
+              xyz="-0.002906 -0.21599 -0.00686683"
+              rpy="0 3.14159 1.5708" />
+          </xacro:if>
+          <xacro:if value="${end_rot == 0}">
+            <origin
+              xyz="0.002906 -0.21599 -0.00066683"
+              rpy="-1.5708 0 -1.5708" />
+          </xacro:if>
       <parent link="${prefix}link3" />
       <child link="${prefix}gripper_link" />
       <axis xyz="0 0 1" />
