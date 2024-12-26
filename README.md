@@ -199,15 +199,19 @@ Check the serial devices again:
 
 You should now see a new device like `/dev/ttyUSB0` at the end of the list. If not, disconnect and reconnect the robotic arm.
 
-### 3.2 Change the Serial Port Device
-If the detected serial port device is `/dev/ttyUSB0`, you can skip this section and proceed to **3.3** Running the Robotic Arm Driver Node.
+### 3.2 Update the Serial Port Device
 
-If the serial port device is not `/dev/ttyUSB0`, you need to update the serial port device name in the Python script `~/roarm_ws_em0/src/roarm_main/roarm_driver/roarm_driver/roarm_driver.py` by changing line 15:
+Grant read and write permissions to the serial device using the following command (replace `/dev/ttyUSB0` with your actual device path):
 
-    serial_port = "/dev/ttyUSB0"
+    sudo chmod 666 /dev/ttyUSB0
+
+If the serial port device is not `/dev/ttyUSB0`, you can either provide the proper device name at launch and/or you can update the serial port device name in the launch file `~/roarm_ws_em0/src/roarm_main/roarm_driver/launch/roarm.launch.py` by changing line 10:
+
+    default_value='/dev/ttyUSB0',
 
 to your actual serial port device name.
-![image](images/roarm_driver.py.png)
+<img src="images/roarm.launch.py.png" alt="editor" width="600"/>
+
 Then, recompile the ROS2 packages in the terminal:
 
     cd ~/roarm_ws_em0/
@@ -217,15 +221,13 @@ Then, recompile the ROS2 packages in the terminal:
 ### 3.3 Running the Robotic Arm Driver Node
 According to the ROS2 official documentation, it is not recommended to run ROS2 nodes in the same terminal where you compile the packages. Open a new terminal window using `Ctrl + Alt + T`.
 
-Grant serial port permissions and run the ROS2 robotic arm driver node:
+Launch the driver node:
 
-Grant read and write permissions to the serial device using the following command (replace `/dev/ttyUSB0` with your actual device path):
+    ros2 launch roarm_driver roarm.launch.py #if you have the default port or edited the launch file
 
-    sudo chmod 666 /dev/ttyUSB0
+Or, override the serial port name at launch with something like:
 
-Run the driver node:
-
-    ros2 run roarm_driver roarm_driver
+    ros2 launch roarm_driver roarm.launch.py serial_port:=/dev/ttyUSB2 
 
 ### 3.4 Viewing the Model Joints
 Open a new terminal window with `Ctrl + Alt + T`.
@@ -565,3 +567,49 @@ Call the service to make the robotic arm draw a circle at the specified position
 The x, y, and z parameters specify the center of the circle, and radius specifies the radius of the circle in meters.
 
 By calling this service, you can control the robotic arm to draw a circle at the desired position.
+
+## 9 Description Options ##
+
+The URDF description is embedded in xacro files to enable extended capabilities:
+- Dynamically generate the latest description at launch-time
+- Allow multiple copies of the arm to be loaded into a robot_description
+- Allow the end-effector to be rotated
+- Mount the arm on a robot
+
+### 9.1 Xacro Arguments ###
+The arguments to the xacro files include:
+- **prefix**. This parameter governs the prefix applied to the beginning of all links and joints. Because the TF framespace is global, multiple instances of the arm or robots can't have the same name. Defaults to nothing.
+- **arm_base_link_name**. If you don't want to use a namespace to isolate the arm, this parameter allows you to rename the base link so it doesn't conflict with the robot's base_link. Defaults to base_link.
+- **end_rot**. The final joint for the arm can be rotated by adjusting the clamp that holds the last servo. The factory configuration has the gripper opening to the right. To change the rotation, specifiy either 90, 180 or 270 degrees rotation. This is a CCW rotation when looking at the gripper. Defaults to 0.
+
+To run build the description, change to the roarm_description/urdf folder and run:
+
+    xacro roarm_description.urdf.xacro
+
+This will compile the description and put it out to the terminal. It won't actually change anything. To experiment with the defaults run it like:
+
+    xacro roarm_description.urdf.xacro prefix:=/left_arm/ end_rot:=180
+
+This will cause all the link and joint names to start with /left_arm and flip the end effector to grip from the left.
+
+To save the compiled urdf, output it to roarm_generated.urdf:
+
+    xacro roarm_description.urdf.xacro prefix:=/left_arm/ end_rot:=180 > roarm_generaated.urdf
+
+Remember to a fresh **colcon build** if not using the --symlink-install option. It's not necessary to save the changes if doing a live compile with a launch file:
+
+### 9.2 Launch Example of Two Mounted Arms ###
+
+To display two arms attached to a simplistic robot base, enabled with the same parameters, run:
+
+    ros2 launch roarm_description mounted.display.launch.py end_rot:=90
+
+Examine this launch file to understand how multiple arms could be added to a robot or how multiple robots with arms could exist in the same robot description. This command will launch the arms with the gripper/wrist rotated to open downward.
+
+This launch file defaults to an example namespace of /mybot1. All of the nodes it launches will share this namespace which can help create isolation needed to manage duplicates. 
+
+In depth treatment of node isolation is beyond the scope of this example. To actually run two roarm_driver nodes you would need to isolate them with their own arm namespaces so they pick up their respective joints. The harder problem on a real robot might lie in reliabily assigning the correct serial port to each arm across reboots.
+
+This launch file compiles the xacro at launch time and loads the description as a parameter, pulling in the latest changes and arguments. If the robot base gets moved around in the environment the arms should move with it.
+
+<img src="images/twoarms.PNG" alt="Two Arms, One Bot" width="600"/>

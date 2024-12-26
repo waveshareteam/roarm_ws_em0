@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<!-- 
+  This Xacro file defines a minimal robot with a single static box as the base for a roarm.
+  The intent is to illustrate how a robot description allowing namespace support and end-effector
+  rotation can be assembled from the standard arm description. 
+  
+  This is not meant to be supported by the Waveshare team,
+  nor to necessarily be compatible with other examples like moveit2
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="single_box_robot">
+<!-- Declare Arguments with Default Values -->
+  <xacro:arg name="prefix" default=""/>
+  <xacro:arg name="base_link_name" default="base_link"/>
+  <xacro:arg name="end_rot" default="0"/>
+
+  <!-- Parameters -->
+  <xacro:property name="box_length" value="0.15"/>
+  <xacro:property name="box_width" value="0.3"/>
+  <xacro:property name="box_height" value="0.02"/>
+  <xacro:property name="box_color" value="1.0 1.0 0.0 1.0"/>
+
+  <!-- Base Link -->
+  <link name="$(arg prefix)base_link">
+    <visual>
+      <geometry>
+        <box size ="${box_length} ${box_width} ${box_height}"/>
+      </geometry>
+      <material name="yellow">
+        <color rgba="${box_color}"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size ="${box_length} ${box_width} ${box_height}"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Arm1 Base Link Joint -->
+  <joint name="arm_to_bot_joint" type="fixed">
+    <parent link="$(arg prefix)base_link"/> <!-- whatever link we want to join the arm to -->
+    <child link="$(arg prefix)arm_left/$(arg base_link_name)"/>
+    <origin xyz="0 0.1 ${box_height}" rpy="0 0 0"/>
+  </joint>
+
+<!-- Arm2 Base Link Joint -->
+  <joint name="arm_to_bot_joint_2" type="fixed">
+    <parent link="$(arg prefix)base_link"/> <!-- whatever link we want to join the arm to -->
+    <child link="$(arg prefix)arm_right/$(arg base_link_name)"/>
+    <origin xyz="0 -0.1 ${box_height}" rpy="0 0 0"/>
+  </joint>
+
+
+  <!-- Include the Macro Definition -->
+  <xacro:include filename="$(find roarm_description)/urdf/roarm_description.urdf.xacro"/>
+
+  <!-- Instantiate the Macro, Passing the Arguments -->
+  <xacro:roarm_robot_arm prefix="$(arg prefix)arm_left/" base_link_name="$(arg base_link_name)" end_rot="$(arg end_rot)"/>
+
+  <!-- Instantiate 2nd Arm Macro, Passing the Arguments -->
+  <xacro:roarm_robot_arm prefix="$(arg prefix)arm_right/" base_link_name="$(arg base_link_name)" end_rot="$(arg end_rot)"/>
+
+</robot>

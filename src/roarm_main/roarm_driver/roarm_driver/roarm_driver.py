@@ -12,8 +12,6 @@ import logging
 import time
 import math
 
-serial_port = "/dev/ttyUSB0"
-
 class ReadLine:
     def __init__(self, s):
         self.buf = bytearray()
@@ -84,11 +82,11 @@ class RoarmDriver(Node):
     def __init__(self):
         super().__init__('roarm_driver')
         
-        self.declare_parameter('serial_port', serial_port)
+        self.declare_parameter('serial_port', '/dev/ttyUSB0')
         self.declare_parameter('baud_rate', 115200)
         
-        serial_port_name = self.get_parameter('serial_port').get_parameter_value().string_value
-        baud_rate = self.get_parameter('baud_rate').get_parameter_value().integer_value
+        serial_port_name = self.get_parameter('serial_port').value
+        baud_rate = self.get_parameter('baud_rate').value
         
         try:
             self.serial_port = serial.Serial(serial_port_name, baud_rate)
@@ -99,7 +97,7 @@ class RoarmDriver(Node):
             time.sleep(0.1)
             
         except SerialException as e:
-            self.get_logger().error(f"{serial_port_name}：{e}")
+            self.get_logger().error(f"{serial_port_name}: {e}")
             return
 
         self.joint_states_sub = self.create_subscription(JointState, 'joint_states', self.joint_states_callback,10)  
@@ -115,16 +113,18 @@ class RoarmDriver(Node):
             },
             'frame_id': msg.header.frame_id,
         }
+        namespace = self.get_namespace()
+        namespace_prefix = f"{namespace}/" if namespace != "/" else ""
         
         name = msg.name
         position = msg.position
         velocity = msg.velocity
         effort = msg.effort
 
-        base = -position[name.index('base_link_to_link1')]
-        shoulder = -position[name.index('link1_to_link2')]
-        elbow = position[name.index('link2_to_link3')] 
-        hand =  3.1415926 - position[name.index('link3_to_gripper_link')]
+        base = -position[name.index(f"{namespace_prefix}base_link_to_link1")]
+        shoulder = -position[name.index(f"{namespace_prefix}link1_to_link2")]
+        elbow = position[name.index(f"{namespace_prefix}link2_to_link3")]
+        hand = 3.1415926 - position[name.index(f"{namespace_prefix}link3_to_gripper_link")]
 
         data = json.dumps({
             'T': 102, 
@@ -146,7 +146,7 @@ class RoarmDriver(Node):
         try:
             request_data = json.dumps({'T': 105}) + "\n"
             self.serial_port.write(request_data.encode())
-            self.base_controller = BaseController(serial_port, 115200)
+            self.base_controller = BaseController(self.get_parameter('serial_port').value, 115200)
             time.sleep(0.1)
             self.base_controller.feedback_data()
             
